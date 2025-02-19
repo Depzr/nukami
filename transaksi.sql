@@ -1,64 +1,137 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               8.0.30 - MySQL Community Server - GPL
--- Server OS:                    Win64
--- HeidiSQL Version:             12.1.0.6537
--- --------------------------------------------------------
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Feb 19, 2025 at 09:05 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `transaksi`
+--
 
--- Dumping database structure for diskon
-CREATE DATABASE IF NOT EXISTS `diskon` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `diskon`;
+-- --------------------------------------------------------
 
--- Dumping structure for table diskon.barang
-CREATE TABLE IF NOT EXISTS `barang` (
-  `IdBarang` int NOT NULL AUTO_INCREMENT,
+--
+-- Table structure for table `barang`
+--
+
+CREATE TABLE `barang` (
+  `IdBarang` int(11) NOT NULL,
   `NamaBarang` varchar(50) DEFAULT NULL,
-  `JenisBarang` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`IdBarang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Harga` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table diskon.barang: ~0 rows (approximately)
+--
+-- Dumping data for table `barang`
+--
 
--- Dumping structure for table diskon.transaksi
-CREATE TABLE IF NOT EXISTS `transaksi` (
-  `IdTransaksi` int NOT NULL AUTO_INCREMENT,
+INSERT INTO `barang` (`IdBarang`, `NamaBarang`, `Harga`) VALUES
+(11, 'mie', '3000'),
+(12, 'spageti wow', '3000');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi`
+--
+
+CREATE TABLE `transaksi` (
+  `IdTransaksi` int(11) NOT NULL,
   `Jumlah` varchar(50) DEFAULT NULL,
   `TotalHarga` varchar(255) DEFAULT NULL,
-  `IdBarang` int DEFAULT NULL,
-  `IdUser` int DEFAULT NULL,
-  PRIMARY KEY (`IdTransaksi`),
-  KEY `FK_transaksi_barang` (`IdBarang`),
-  KEY `FK_transaksi_user` (`IdUser`),
-  CONSTRAINT `FK_transaksi_barang` FOREIGN KEY (`IdBarang`) REFERENCES `barang` (`IdBarang`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_transaksi_user` FOREIGN KEY (`IdUser`) REFERENCES `user` (`IdUser`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `IdBarang` int(11) DEFAULT NULL,
+  `IdUser` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table diskon.transaksi: ~0 rows (approximately)
+--
+-- Dumping data for table `transaksi`
+--
 
--- Dumping structure for table diskon.user
-CREATE TABLE IF NOT EXISTS `user` (
-  `IdUser` int NOT NULL AUTO_INCREMENT,
+INSERT INTO `transaksi` (`IdTransaksi`, `Jumlah`, `TotalHarga`, `IdBarang`, `IdUser`) VALUES
+(12, '1', 'Rp.3000,00', 11, 23),
+(13, '1', '3000', 11, 1),
+(14, '1', '3000', 11, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `IdUser` int(11) NOT NULL,
   `Username` varchar(50) DEFAULT NULL,
   `Password` varchar(255) DEFAULT NULL,
   `NamaLengkap` varchar(50) DEFAULT NULL,
-  `Role` enum('Admin','Pengguna') DEFAULT NULL,
-  PRIMARY KEY (`IdUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Role` enum('Admin','Pengguna') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table diskon.user: ~0 rows (approximately)
+--
+-- Dumping data for table `user`
+--
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+INSERT INTO `user` (`IdUser`, `Username`, `Password`, `NamaLengkap`, `Role`) VALUES
+(1, 'rere', '$2y$10$QBYHkt07deZklpPjimKRoOGCItvGpoqQ4fzzfFR40SDwFt4fv1qKO', 'rererara', 'Pengguna');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `barang`
+--
+ALTER TABLE `barang`
+  ADD PRIMARY KEY (`IdBarang`);
+
+--
+-- Indexes for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD PRIMARY KEY (`IdTransaksi`),
+  ADD KEY `FK_transaksi_barang` (`IdBarang`),
+  ADD KEY `FK_transaksi_user` (`IdUser`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`IdUser`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `barang`
+--
+ALTER TABLE `barang`
+  MODIFY `IdBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  MODIFY `IdTransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `IdUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
